@@ -4,7 +4,6 @@
   <title>Welcome to Ticketing System</title>
   <script src="https://unpkg.com/vue@next"></script>
   <style>
-    /* Add some styles to improve the appearance of the page */
     body {
       font-family: Arial, sans-serif;
       margin: 0;
@@ -30,12 +29,7 @@
       font-weight: bold;
       margin-bottom: 5px;
     }
-    input {
-      margin-bottom: 10px;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
+    input,
     textarea {
       margin-bottom: 10px;
       padding: 10px;
@@ -96,15 +90,18 @@
         <h2>{{ selectedTicket.subject }}</h2>
         <p>{{ selectedTicket.description }}</p>
         <p class="status">{{ selectedTicket.status }}</p>
-        <p class="date">{{ formatDate(selectedTicket.date) }}</p>
-        <button @click="selectedTicket = null">Back to Ticket List</button>
-      </div>
-      <div class="ticket-list"></div>
-      <div class="ticket" @click="selectTicket(ticket)" :key="ticket.id">
-          <h2>{{ ticket.subject }}</h2>
-          <p>{{ ticket.description }}</p>
-          <p class="status">{{ ticket.status }}</p>
-          <p class="date">{{ formatDate(ticket.date) }}</p>
+        <div class="ticket-list">
+          <div
+            class="ticket"
+            v-for="ticket in tickets"
+            :key="ticket.id"
+            @click="selectTicket(ticket)"
+          >
+            <h2>{{ ticket.subject }}</h2>
+            <p>{{ ticket.description }}</p>
+            <p class="status">{{ ticket.status }}</p>
+            <p class="date">{{ formatDate(ticket.date) }}</p>
+          </div>
         </div>
       </div>
     </div>
