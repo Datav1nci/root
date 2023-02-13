@@ -99,7 +99,7 @@
         <p class="date">{{ formatDate(selectedTicket.date) }}</p>
         <button @click="selectedTicket = null">Back to Ticket List</button>
       </div>
-      <div class="ticket-list">
+      <div class="ticket-list"></div>
       <div class="ticket" @click="selectTicket(ticket)" :key="ticket.id">
           <h2>{{ ticket.subject }}</h2>
           <p>{{ ticket.description }}</p>
