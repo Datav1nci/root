@@ -1,18 +1,139 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Vue.js Installation Test</title>
+  <title>Welcome to Ticketing System</title>
   <script src="https://unpkg.com/vue@next"></script>
+  <style>
+    /* Add some styles to improve the appearance of the page */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    h1 {
+      text-align: center;
+      margin: 50px 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+    label {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    input {
+      margin-bottom: 10px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    textarea {
+      margin-bottom: 10px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      background-color: #0077FF;
+      color: #fff;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    button:hover {
+      background-color: #0052CC;
+    }
+    .ticket-list {
+      margin-top: 50px;
+    }
+    .ticket {
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      padding: 20px;
+      margin-bottom: 10px;
+    }
+    .ticket h2 {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+    .ticket p {
+      margin-bottom: 10px;
+    }
+    .ticket .status {
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .ticket .date {
+      font-style: italic;
+      font-size: 12px;
+    }
+  </style>
 </head>
 <body>
   <div id="app">
-    {{ message }}
+    <h1>Welcome to our Ticketing System</h1>
+    <div class="container">
+      <form v-if="!selectedTicket" @submit.prevent="createTicket">
+        <label for="subject">Subject:</label>
+        <input id="subject" type="text" v-model="newTicket.subject" required>
+        <label for="description">Description:</label>
+        <textarea id="description" v-model="newTicket.description" required></textarea>
+        <button type="submit">Create Ticket</button>
+      </form>
+      <div v-else>
+        <h2>{{ selectedTicket.subject }}</h2>
+        <p>{{ selectedTicket.description }}</p>
+        <p class="status">{{ selectedTicket.status }}</p>
+        <p class="date">{{ formatDate(selectedTicket.date) }}</p>
+        <button @click="selectedTicket = null">Back to Ticket List</button>
+      </div>
+      <div class="ticket-list">
+      <div class="ticket" @click="selectTicket(ticket)" :key="ticket.id">
+          <h2>{{ ticket.subject }}</h2>
+          <p>{{ ticket.description }}</p>
+          <p class="status">{{ ticket.status }}</p>
+          <p class="date">{{ formatDate(ticket.date) }}</p>
+        </div>
+      </div>
+    </div>
   </div>
   <script>
     const app = Vue.createApp({
       data() {
         return {
-          message: 'Hello, Vue!'
+          tickets: [
+            { id: 1, subject: "Ticket 1", description: "Description of ticket 1", status: "Open", date: "2023-02-10" },
+            { id: 2, subject: "Ticket 2", description: "Description of ticket 2", status: "Open", date: "2023-02-11" },
+            { id: 3, subject: "Ticket 3", description: "Description of ticket 3", status: "Closed", date: "2023-02-12" }
+          ],
+          selectedTicket: null,
+          newTicket: { subject: '', description: '', status: 'Open', date: new Date().toISOString().slice(0,10) }
+        }
+      },
+      methods: {
+        selectTicket(ticket) {
+          this.selectedTicket = ticket
+        },
+        createTicket() {
+          this.newTicket.id = this.tickets.length + 1
+          this.tickets.push(this.newTicket)
+          this.newTicket = { subject: '', description: '', status: 'Open', date: new Date().toISOString().slice(0,10) }
+        },
+        formatDate(dateString) {
+          const options = { year: 'numeric', month: 'long', day: 'numeric' }
+          return new Date(dateString).toLocaleDateString(undefined, options)
         }
       }
     })
